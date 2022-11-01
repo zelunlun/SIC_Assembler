@@ -1,0 +1,4 @@
+  -		FIRST   START  1111
+0x1111	  -     LDX    ZERO	1111
+0x1114	  -     LDA    ZERO	1114
+0x1117	LOOP    ADD    TABLE,X	

@@ -1,0 +1,13 @@
+FIRST   START  1111
+  -     LDX    ZERO
+  -     LDA    ZERO
+LOOP    ADD    TABLE,X
+  -     TIX    COUNT
+  -     JLT    LOOP
+  -     STA    TOTAL
+  -     RSUB    -  
+TABLE   RESW   15
+COUNT   RESW   3
+ZERO    WORD   3
+TOTAL   RESB   2
+  -     END    FIRST
