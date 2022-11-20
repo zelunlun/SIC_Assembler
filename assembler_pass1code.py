@@ -1,7 +1,7 @@
 from binarytree import Node
 
 inp = open("input.txt","r")
-out = open("output.txt","w")
+# out = open("output.txt","w")
 symtab = open("SymbolTab.txt","w")
 
 optab = {
@@ -32,40 +32,81 @@ optab = {
 	"TIX":"2C",
 	"WD":"DC"
 }
-
-first = inp.readline()
-out.write("  -\t\t"+first)
-first_line = first.split()
-
-LOCCTR = first_line[2]
+line_elem = []
 sym = {}
 tree = Node()
 
+with open('input.txt','r') as test_input:
+	first_line = test_input.readline().split()
+	LOCCTR = first_line[2]
+	tree.insert(first_line[0], hex(int(LOCCTR,16)))
 
-for line in inp.readlines():
-	print(line)
-	line_elem = line.split()
-	symtab.write(str(hex(int(LOCCTR,16)))+"\t"+line)
-	sym[line_elem[0]] = str(hex(int(LOCCTR,16)))
+	with open('SymbolTab.txt','w') as Symbol_output:
+		for line in test_input.readlines():
+			line_elem = line.split()
+			
+			# symtab.write(hex(int(LOCCTR,16)))+"\t"+line
+			sym[line_elem[0]] = hex(int(LOCCTR,16))
+			
+			if line_elem[0] != '-':
+				tree.insert(line_elem[0], LOCCTR)
+				Symbol_output.write(tree.inorder()[0])
+				Symbol_output.write(tree.inorder()[1])
+				
+
+			if line_elem[1] in optab or line_elem[1] == 'WORD':
+				LOCCTR = hex(int(LOCCTR,16)+3)
+			elif line_elem[1] == "RESW":
+				temp = hex(int(line_elem[2])*3)
+				LOCCTR = hex(int(LOCCTR,16)+int(temp,16))
+			elif line_elem[1]=="RESB":
+				LOCCTR = hex(int(LOCCTR,16)+int(line_elem[2]))
+			elif line_elem[1]=="BYTE":
+				if line_elem[2][0]=="X":
+					LOCCTR = hex(int(LOCCTR,16)+(len(line_elem[2])-3)/2)
+				elif line_elem[2][0]=="C":
+					LOCCTR = hex(int(LOCCTR,16)+(len(line_elem[2])-3))
+
+print(tree.inorderTraversal())
+
+"""
+first = inp.readline()
+out.write("  -\t\t"+first)
+first_line = first.split()
+"""
+
+# LOCCTR = first_line[2]
+# sym = {}
+# tree = Node()
+
+
+# for line in inp.readlines():
+# 	# print(line)
+# 	line_elem = line.split()
+# 	symtab.write(str(hex(int(LOCCTR,16)))+"\t"+line)
+# 	sym[line_elem[0]] = str(hex(int(LOCCTR,16)))
 	
-	if line_elem[0] != '-':
-		tree.insert(line_elem[0], LOCCTR)
+# 	if line_elem[0] != '-':
+# 		tree.insert(line_elem[0], LOCCTR)
 
-	if line_elem[1] in optab or line_elem[1] == 'WORD':
-		LOCCTR = str(hex(int(LOCCTR,16)+3))
-	elif line_elem[1] == "RESW":
-		temp = hex(int(line_elem[2])*3)
-		LOCCTR = str(hex(int(LOCCTR,16)+int(temp,16)))
-	elif line_elem[1]=="RESB":
-		LOCCTR = str(hex(int(LOCCTR,16)+int(line_elem[2])))
-	elif line_elem[1]=="BYTE":
-		if line_elem[2][0]=="X":
-			LOCCTR = str(hex(int(LOCCTR,16)+(len(line_elem[2])-3)/2))
-		elif line_elem[2][0]=="C":
-			LOCCTR = str(hex(int(LOCCTR,16)+(len(line_elem[2])-3)))
+# 	if line_elem[1] in optab or line_elem[1] == 'WORD':
+# 		LOCCTR = str(hex(int(LOCCTR,16)+3))
+# 	elif line_elem[1] == "RESW":
+# 		temp = hex(int(line_elem[2])*3)
+# 		LOCCTR = str(hex(int(LOCCTR,16)+int(temp,16)))
+# 	elif line_elem[1]=="RESB":
+# 		LOCCTR = str(hex(int(LOCCTR,16)+int(line_elem[2])))
+# 	elif line_elem[1]=="BYTE":
+# 		if line_elem[2][0]=="X":
+# 			LOCCTR = str(hex(int(LOCCTR,16)+(len(line_elem[2])-3)/2))
+# 		elif line_elem[2][0]=="C":
+# 			LOCCTR = str(hex(int(LOCCTR,16)+(len(line_elem[2])-3)))
 
-tree.inorder()
-symtab.close()
+# tree.inorder()
+
+"""
+	-------------------------------------------------------------
+"""
 # symtab = open('SymbolTab.txt','r')
 # sym.pop('-')
 # sym.update({'TABLE,X':'0x1126'})
@@ -100,9 +141,9 @@ symtab.close()
 	
 
 
-inp.close()
-out.close()
-symtab.close()
+# inp.close()
+# out.close()
+# symtab.close()
    
 
 
